@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="pt-BR"><head><meta charset="UTF-8"><meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Painel do Salão · Katielly Sousa Studio</title><link rel="icon" href="/logo.jpg"><link rel="stylesheet" href="/style.css">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500&family=Manrope:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+body{display:flex;min-height:100vh}
+aside{width:210px;border-right:1px solid var(--line);padding:22px 14px;flex-shrink:0}
+aside .logo{font-family:'Playfair Display',serif;letter-spacing:.2em;color:var(--gold);font-size:15px;padding:0 6px}
+aside small{display:block;font-size:8px;letter-spacing:.2em;color:var(--mut);padding:2px 6px 22px}
+aside button{display:block;width:100%;text-align:left;background:none;border:1px solid transparent;color:#cfc7ae;padding:11px 12px;border-radius:10px;font:500 10px Manrope;letter-spacing:.15em;text-transform:uppercase;cursor:pointer;margin-bottom:6px}
+aside button.on{background:#1d1905;border-color:#4d4216;color:var(--gold)}
+aside a{font-size:10px;color:var(--mut);padding:0 12px;display:block;margin-top:20px;letter-spacing:.1em}
+main{flex:1;padding:36px 5vw;max-width:1000px;margin:0 auto;min-width:0}
+.eb{font-size:9px;letter-spacing:.25em;color:#c28a1a;text-transform:uppercase}
+main h1{font-family:'Playfair Display',serif;font-weight:400;font-size:30px;margin:6px 0 18px;background:none;color:var(--txt)}
+.bar{display:flex;align-items:center;gap:12px;background:var(--card);border:1px solid var(--line);border-radius:16px;padding:12px 16px;flex-wrap:wrap}
+.ic{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);background:none;color:var(--txt);cursor:pointer}
+.lbl{font-size:13px;font-weight:500;min-width:170px;text-align:center}
+.lnk{background:none;border:0;color:#cfc7ae;font:12px Manrope;cursor:pointer}
+.sp{flex:1}
+.seg{display:flex;background:#0c0c0c;border:1px solid var(--line);border-radius:99px;padding:3px}
+.seg button{border:0;background:none;color:#cfc7ae;font:600 9px Manrope;letter-spacing:.15em;padding:7px 14px;border-radius:99px;cursor:pointer}
+.seg button.on{background:var(--gold);color:#111}
+.stats{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;margin:14px 0 24px}
+.st{background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px}
+.st small{font-size:8.5px;letter-spacing:.18em;color:var(--mut);text-transform:uppercase;display:block}
+.st b{font-family:'Playfair Display',serif;font-weight:400;font-size:24px;color:#b8962e;display:block;margin-top:10px}
+.st i{font-style:normal;font-size:9px;letter-spacing:.12em;color:var(--mut);text-transform:uppercase}
+.dayh{display:flex;align-items:center;gap:14px;margin:22px 0 12px;font-family:'Playfair Display',serif;font-size:18px}
+.dayh:after{content:'';flex:1;height:1px;background:linear-gradient(90deg,#4d4216,transparent)}
+.dayh small{order:3;font:9px Manrope;letter-spacing:.15em;color:var(--mut);text-transform:uppercase}
+.item{display:flex;align-items:center;gap:18px;background:var(--card);border:1px solid var(--line);border-radius:14px;padding:16px 20px;margin-bottom:10px}
+.item.cancelado{opacity:.5}
+.item .t{font-family:'Playfair Display',serif;color:#b8962e;font-size:18px;width:52px}
+.item .who{flex:1;min-width:0}
+.item .who b{font-size:14px;font-weight:600}
+.item .who div{font-size:11px;color:var(--mut);margin-top:3px}
+.item .who .sv{color:#8fb0c4;margin-top:6px}
+.tag{color:#c28a1a;margin-left:6px}
+.pr{text-align:right}
+.pr b{font-family:'Playfair Display',serif;font-size:17px;font-weight:500;display:block}
+.pr small{font-size:9px;letter-spacing:.15em;color:#c28a1a;text-transform:uppercase}
+.bd{font-size:9px;letter-spacing:.1em;text-transform:uppercase;border-radius:99px;padding:5px 12px;border:1px solid;font-weight:600}
+.bd.confirmado{color:var(--gold);border-color:#6b5b1d}
+.bd.concluido{color:#4ade80;border-color:#166534;background:#0d2a17}
+.bd.cancelado{color:#f87171;border-color:#7f1d1d;background:#2a0d0d}
+.wa{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:13px}
+.kb{position:relative}
+.kb>button{background:none;border:0;color:var(--txt);cursor:pointer;font-size:18px;padding:4px 8px}
+.menu{position:absolute;right:0;top:30px;background:#161616;border:1px solid #3a3320;border-radius:12px;padding:6px;min-width:200px;z-index:5;box-shadow:0 10px 30px #000a}
+.menu button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--txt);font:500 13px Manrope;padding:10px;border-radius:8px;cursor:pointer}
+.menu button:hover{background:#222}.menu .red{color:#f87171}
+.empty{text-align:center;color:var(--mut);padding:50px 0;font-size:13px}
+.modal{position:fixed;inset:0;background:#000b;display:grid;place-items:center;z-index:20;padding:16px}
+.mbox{background:#141414;border:1px solid #3a3320;border-radius:20px;padding:26px;width:100%;max-width:480px;position:relative}
+.mbox h3{font-family:'Playfair Display',serif;font-size:20px}
+.mbox p{color:var(--mut);margin:6px 0 18px;font-size:13px}
+.mbox .x{position:absolute;right:16px;top:14px;background:none;border:0;color:var(--txt);font-size:18px;cursor:pointer}
+.pay{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pay button{background:#101010;border:1px solid #3a3320;border-radius:12px;color:#cfc7ae;padding:22px 6px;font:500 11px Manrope;letter-spacing:.15em;cursor:pointer}
+.pay button:hover{border-color:var(--gold);color:var(--gold)}
+.mbox select{width:100%;margin-top:6px;padding:13px;border-radius:12px;background:#101010;border:1px solid var(--line);color:var(--txt);font:14px Manrope}
+.panel{background:var(--card);border:1px solid var(--line);border-radius:16px;padding:22px;margin-bottom:16px}
+.panel h3{font-family:'Playfair Display',serif;font-weight:500;font-size:17px;margin-bottom:16px}
+.chart{display:flex;align-items:flex-end;gap:3px;height:160px}
+.chart div{flex:1;background:linear-gradient(#d4b13c,#7a6620);border-radius:3px 3px 0 0;min-height:2px;position:relative}
+.chart div:hover:after{content:attr(data-t);position:absolute;bottom:100%;left:50%;transform:translateX(-50%);background:#222;padding:3px 7px;border-radius:6px;font-size:10px;white-space:nowrap}
+.axis{display:flex;gap:3px;font-size:8px;color:var(--mut);margin-top:4px}.axis span{flex:1;text-align:center}
+.row{display:flex;justify-content:space-between;padding:10px 0;border-bottom:1px solid var(--line);font-size:13px}
+.row:last-child{border:0}.row b{color:#b8962e;font-family:'Playfair Display',serif;font-weight:500}
+.two{display:grid;grid-template-columns:1fr 1fr;gap:16px}
+#login{max-width:340px;margin:12vh auto;padding:0 20px;width:100%}
+@media(max-width:800px){body{flex-direction:column}aside{width:auto;border:0;border-bottom:1px solid var(--line);display:flex;gap:6px;align-items:center;flex-wrap:wrap}aside small{display:none}aside button{width:auto;margin:0}aside a{margin:0}.stats{grid-template-columns:1fr 1fr}.two{grid-template-columns:1fr}.item{flex-wrap:wrap;gap:10px}.lbl{min-width:0;flex:1}}
+</style></head>
+<body>
+<div id="login" hidden>
+  <h2 style="text-align:center">Painel do Salão</h2>
+  <label class="field">Senha<input id="pw" type="password" autofocus></label>
+  <button class="btn" id="in" style="width:100%">Entrar</button><div class="err" id="e" style="text-align:center"></div>
+  <p style="text-align:center;margin-top:20px"><a href="/" class="tiny">← VOLTAR AO SITE</a></p>
+</div>
+<aside id="side" hidden>
+  <div class="logo">KATIELLY SOUSA</div><small>PAINEL DO SALÃO</small>
+  <button data-v="agenda" class="on">📅 Agenda</button><button data-v="fin">💰 Financeiro</button>
+  <a href="/">← Ver site</a><a href="#" id="out">Sair</a>
+</aside>
+<main id="main" hidden></main>
+<div id="modal"></div>
+<script>
+const $=s=>document.querySelector(s);
+const HOURS=['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+const SV={sobrancelha:'Design de Sobrancelhas',henna:'Design com Henna'};
+const PAYN={pix:'PIX',cartao:'Cartão',dinheiro:'Dinheiro'};
+const DOWL=['Domingo','Segunda-Feira','Terça-Feira','Quarta-Feira','Quinta-Feira','Sexta-Feira','Sábado'];
+const MON=['Janeiro','Fevereiro','Março','Abril','Maio','Junho','Julho','Agosto','Setembro','Outubro','Novembro','Dezembro'];
+let pw=sessionStorage.pw||'',data=[],view='agenda',mode='dia',cur=new Date(),finM=new Date();
+cur.setHours(12);finM.setDate(1);finM.setHours(12);
+const iso=d=>`${d.getFullYear()}-${String(d.getMonth()+1).padStart(2,'0')}-${String(d.getDate()).padStart(2,'0')}`;
+const parse=s=>new Date(s+'T12:00:00');
+const brl=n=>'R$ '+Number(n||0).toLocaleString('pt-BR',{minimumFractionDigits:2});
+const esc=s=>String(s??'').replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c]));
+const price=b=>b.price??(b.service==='henna'?40:30);
+const cap=s=>s.replace(/(^|\s)\S/g,c=>c.toUpperCase());
+const fmtD=d=>cap(`${DOWL[d.getDay()]}, ${d.getDate()} de ${MON[d.getMonth()]}`.replace('Feira','Feira')).replace(' De ',' De ');
+function weekRange(d){const x=new Date(d);const k=(x.getDay()+6)%7;x.setDate(x.getDate()-k);const e=new Date(x);e.setDate(x.getDate()+6);return[iso(x),iso(e)]}
+function range(){
+  if(mode==='dia')return[iso(cur),iso(cur)];
+  if(mode==='semana')return weekRange(cur);
+  return[iso(new Date(cur.getFullYear(),cur.getMonth(),1,12)),iso(new Date(cur.getFullYear(),cur.getMonth()+1,0,12))];
+}
+async function api(method,body,qs=''){
+  const r=await fetch('/api/admin'+qs,{method,headers:{'x-admin-password':pw,'Content-Type':'application/json'},body:body?JSON.stringify(body):undefined});
+  return{ok:r.ok,status:r.status,json:await r.json().catch(()=>({}))};
+}
+async function load(){
+  const r=await api('GET');
+  if(!r.ok){$('#login').hidden=false;$('#side').hidden=$('#main').hidden=true;if(pw)$('#e').textContent='Senha incorreta';return}
+  sessionStorage.pw=pw;data=r.json.bookings;
+  $('#login').hidden=true;$('#side').hidden=false;$('#main').hidden=false;
+  document.body.style.display='';document.body.style.display='flex';render();
+}
+function render(){view==='agenda'?renderAgenda():renderFin()}
+function renderAgenda(){
+  const[a,b]=range();
+  const list=data.filter(x=>x.date>=a&&x.date<=b).sort((x,y)=>(x.date+x.time).localeCompare(y.date+y.time));
+  const c=s=>list.filter(x=>(x.status||'confirmado')===s);
+  const rec=c('concluido').reduce((s,x)=>s+price(x),0);
+  let label=mode==='dia'?fmtD(cur):mode==='semana'?`${a.split('-').reverse().slice(0,2).join('/')} a ${b.split('-').reverse().slice(0,2).join('/')}`:`${MON[cur.getMonth()]} ${cur.getFullYear()}`;
+  const days={};list.forEach(x=>(days[x.date]=days[x.date]||[]).push(x));
+  let body=Object.keys(days).map(d=>`<div class="dayh">${fmtD(parse(d))}<small>${days[d].length} horário${days[d].length>1?'s':''}</small></div>`+days[d].map(item).join('')).join('')
+    ||`<div class="empty">Nenhum agendamento ${mode==='dia'?'neste dia':'neste período'}.</div>`;
+  if(mode==='dia'&&!list.length)body=`<div class="dayh">${fmtD(cur)}</div>`+body;
+  $('#main').innerHTML=`<div class="eb">Painel do salão</div><h1>Agenda</h1>
+  <div class="bar"><button class="ic" id="prev">‹</button><span class="lbl">${label}</span><button class="ic" id="next">›</button><button class="lnk" id="today">Hoje</button><span class="sp"></span>
+  <div class="seg">${['dia','semana','mes'].map(m=>`<button data-m="${m}" class="${m===mode?'on':''}">${m==='mes'?'MÊS':m.toUpperCase()}</button>`).join('')}</div>
+  <button class="btn sm" id="bal">＋ BALCÃO</button></div>
+  <div class="stats"><div class="st"><small>Confirmados</small><b>${c('confirmado').length}</b></div><div class="st"><small>Concluídos</small><b>${c('concluido').length}</b></div><div class="st"><small>Cancelados</small><b>${c('cancelado').length}</b></div><div class="st"><small>Recebido no período</small><b>${brl(rec)}</b></div></div>${body}`;
+  const step=n=>{if(mode==='dia')cur.setDate(cur.getDate()+n);else if(mode==='semana')cur.setDate(cur.getDate()+7*n);else{cur.setDate(1);cur.setMonth(cur.getMonth()+n)}renderAgenda()};
+  $('#prev').onclick=()=>step(-1);$('#next').onclick=()=>step(1);
+  $('#today').onclick=()=>{cur=new Date();cur.setHours(12);renderAgenda()};
+  document.querySelectorAll('[data-m]').forEach(b=>b.onclick=()=>{mode=b.dataset.m;renderAgenda()});
+  $('#bal').onclick=balcao;
+  document.querySelectorAll('.kb>button').forEach(b=>b.onclick=e=>{e.stopPropagation();const open=b.nextElementSibling.hidden;closeMenus();b.nextElementSibling.hidden=!open});
+  document.querySelectorAll('[data-a]').forEach(b=>b.onclick=()=>action(b.dataset.a,b.dataset.d,b.dataset.t));
+}
+function closeMenus(){document.querySelectorAll('.menu').forEach(m=>m.hidden=true)}
+document.addEventListener('click',closeMenus);
+function item(x){
+  const s=x.status||'confirmado',k=`data-d="${x.date}" data-t="${x.time}"`;
+  const ph=x.phone?x.phone.replace(/^55/,''):'';
+  return `<div class="item ${s}"><div class="t">${x.time}</div><div class="who"><b>${esc(x.name)}</b>
+  <div>${ph?'📞 '+esc('+55'+ph):'sem telefone'}${x.source==='balcao'?'<span class="tag">balcão</span>':''}</div><div class="sv">${esc(x.serviceName)}</div></div>
+  <div class="pr"><b>${brl(price(x))}</b>${x.payment?`<small>${PAYN[x.payment]}</small>`:''}</div>
+  <span class="bd ${s}">${s==='concluido'?'Concluído':s==='cancelado'?'Cancelado':'Confirmado'}</span>
+  ${ph?`<a class="wa" target="_blank" href="https://wa.me/55${ph}">💬</a>`:''}
+  <div class="kb"><button>⋮</button><div class="menu" hidden>
+  ${s!=='concluido'?`<button data-a="concluir" ${k}>✓ Marcar como concluído</button>`:''}
+  ${s!=='confirmado'?`<button data-a="reabrir" ${k}>Reabrir como confirmado</button>`:''}
+  ${s!=='cancelado'?`<button class="red" data-a="cancelar" ${k}>Cancelar agendamento</button>`:''}</div></div></div>`;
+}
+async function patch(d,t,status,payment){await api('PATCH',{date:d,time:t,status,payment});await load()}
+function action(a,d,t){
+  closeMenus();
+  const x=data.find(v=>v.date===d&&v.time===t);
+  if(a==='reabrir')return patch(d,t,'confirmado');
+  if(a==='cancelar'){if(confirm('Cancelar o agendamento de '+x.name+'?'))patch(d,t,'cancelado');return}
+  modal(`<button class="x" onclick="modal()">✕</button><h3>Forma de pagamento</h3><p>${esc(x.name)} · ${esc(x.serviceName)}</p>
+  <div class="pay"><button data-p="pix">▦<br><br>PIX</button><button data-p="cartao">▭<br><br>CARTÃO</button><button data-p="dinheiro">▤<br><br>DINHEIRO</button></div>`);
+  document.querySelectorAll('[data-p]').forEach(b=>b.onclick=async()=>{modal();await patch(d,t,'concluido',b.dataset.p)});
+}
+function modal(h){$('#modal').innerHTML=h?`<div class="modal" onclick="if(event.target===this)modal()"><div class="mbox">${h}</div></div>`:''}
+function balcao(){
+  modal(`<button class="x" onclick="modal()">✕</button><h3>Novo atendimento de balcão</h3><p>Cliente que chegou direto no estúdio.</p>
+  <label class="field">Nome<input id="bn"></label><label class="field">WhatsApp (opcional)<input id="bp" inputmode="tel"></label>
+  <label class="field">Serviço<select id="bs"><option value="sobrancelha">Design de Sobrancelhas · R$ 30</option><option value="henna">Design com Henna · R$ 40</option></select></label>
+  <label class="field">Data<input id="bd" type="date" value="${iso(cur)}"></label>
+  <label class="field">Horário<select id="bt">${HOURS.map(h=>`<option>${h}</option>`).join('')}</select></label>
+  <div class="err" id="be"></div><button class="btn" id="bg" style="width:100%">Salvar</button>`);
+  $('#bg').onclick=async()=>{
+    const r=await api('POST',{name:$('#bn').value,phone:$('#bp').value,service:$('#bs').value,date:$('#bd').value,time:$('#bt').value});
+    if(!r.ok)return $('#be').textContent=r.json.error||'Erro';
+    modal();cur=parse($('#bd')?.value||iso(cur));await load();
+  };
+}
+function renderFin(){
+  const todayS=iso(new Date()),[wa,wb]=weekRange(new Date());
+  const done=data.filter(x=>x.status==='concluido');
+  const sum=(a,b)=>done.filter(x=>x.date>=a&&x.date<=b).reduce((s,x)=>s+price(x),0);
+  const y=finM.getFullYear(),m=finM.getMonth(),dim=new Date(y,m+1,0).getDate();
+  const ma=iso(new Date(y,m,1,12)),mb=iso(new Date(y,m,dim,12));
+  const month=data.filter(x=>x.date>=ma&&x.date<=mb&&x.status!=='cancelado');
+  const mdone=month.filter(x=>x.status==='concluido');
+  const perDay=Array.from({length:dim},(_,i)=>mdone.filter(x=>+x.date.slice(8)===i+1).reduce((s,x)=>s+price(x),0));
+  const mx=Math.max(...perDay,1);
+  const byPay=['pix','cartao','dinheiro'].map(p=>[PAYN[p],mdone.filter(x=>x.payment===p).reduce((s,x)=>s+price(x),0)]);
+  const bySv=Object.keys(SV).map(k=>[SV[k],mdone.filter(x=>x.service===k).length,mdone.filter(x=>x.service===k).reduce((s,x)=>s+price(x),0)]);
+  $('#main').innerHTML=`<div style="display:flex;justify-content:space-between;align-items:flex-end;flex-wrap:wrap;gap:12px"><div><div class="eb">Painel do salão</div><h1 style="margin-bottom:0">Financeiro</h1></div>
+  <div class="bar" style="border-radius:99px;padding:8px 14px"><button class="ic" id="fp" style="border:0">‹</button><span class="lbl">${MON[m]} ${y}</span><button class="ic" id="fn" style="border:0">›</button></div></div>
+  <div class="stats" style="margin-top:22px"><div class="st"><small>Faturamento do dia</small><b>${brl(sum(todayS,todayS))}</b></div><div class="st"><small>Faturamento da semana</small><b>${brl(sum(wa,wb))}</b></div><div class="st"><small>Faturamento do mês</small><b>${brl(sum(ma,mb))}</b></div><div class="st"><small>Atendimentos realizados</small><b>${mdone.length}</b><i>${month.length-mdone.length} agendados</i></div></div>
+  <div class="panel"><h3>Faturamento por dia</h3><div class="chart">${perDay.map((v,i)=>`<div style="height:${v/mx*100}%" data-t="Dia ${i+1}: ${brl(v)}"></div>`).join('')}</div><div class="axis">${perDay.map((_,i)=>`<span>${(i+1)%5===1||i+1===dim?i+1:''}</span>`).join('')}</div></div>
+  <div class="two"><div class="panel"><h3>Por forma de pagamento</h3>${byPay.map(([n,v])=>`<div class="row"><span>${n}</span><b>${brl(v)}</b></div>`).join('')}</div>
+  <div class="panel"><h3>Por serviço</h3>${bySv.map(([n,q,v])=>`<div class="row"><span>${n} · ${q}</span><b>${brl(v)}</b></div>`).join('')}</div></div>`;
+  $('#fp').onclick=()=>{finM.setMonth(finM.getMonth()-1);renderFin()};$('#fn').onclick=()=>{finM.setMonth(finM.getMonth()+1);renderFin()};
+}
+document.querySelectorAll('aside [data-v]').forEach(b=>b.onclick=()=>{view=b.dataset.v;document.querySelectorAll('aside [data-v]').forEach(x=>x.classList.toggle('on',x===b));render()});
+$('#in').onclick=()=>{pw=$('#pw').value;load()};
+$('#pw').onkeydown=e=>{if(e.key==='Enter')$('#in').click()};
+$('#out').onclick=e=>{e.preventDefault();sessionStorage.clear();pw='';location.reload()};
+if(pw)load();else $('#login').hidden=false;
+</script></body></html>
