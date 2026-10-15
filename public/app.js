@@ -1,7 +1,7 @@
 const WHATS = '5589981298247';
 const SV = {
-  sobrancelha: { name: 'Design de Sobrancelhas', desc: 'Mapeamento do rosto, design personalizado e finalização.', price: 'R$ 30,00' },
-  henna: { name: 'Design com Henna', desc: 'Design completo com aplicação de henna.', price: 'R$ 40,00' },
+  sobrancelha: { name: 'Design de Sobrancelhas', desc: 'Mapeamento do rosto, design personalizado e finalização.', price: 'R$ 30,00', dur: 60, label: '1h' },
+  henna: { name: 'Design com Henna', desc: 'Design completo com aplicação de henna.', price: 'R$ 40,00', dur: 90, label: '1h30' },
 };
 const HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
 const st = { step: 0, service: null, date: null, time: null, name: '', phone: '', err: '' };
@@ -92,3 +92,4 @@ document.querySelectorAll('[data-s]').forEach(b => b.onclick = () => {
   };
 })();
 render();
+

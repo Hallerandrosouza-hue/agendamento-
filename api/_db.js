@@ -7,10 +7,19 @@ const mem = (globalThis.__mem = globalThis.__mem || (() => { try { return JSON.p
 const save = () => { if (!process.env.VERCEL) try { fs.writeFileSync(FILE, JSON.stringify(mem)); } catch {} };
 
 const SERVICES = {
-  sobrancelha: { name: 'Design de Sobrancelhas', price: 30 },
-  henna: { name: 'Design com Henna', price: 40 },
+  sobrancelha: { name: 'Design de Sobrancelhas', price: 30, dur: 60 },
+  henna: { name: 'Design com Henna', price: 40, dur: 90 },
 };
 const HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+const CLOSE = 18 * 60;
+const toMin = t => +t.slice(0, 2) * 60 + +t.slice(3);
+const durOf = b => b.dur || (SERVICES[b.service] || {}).dur || 60;
+// Intervalos [início, fim) em minutos das reservas ativas de um dia
+const busyOf = list => list.filter(b => b.status !== 'cancelado').map(b => ({ start: toMin(b.time), end: toMin(b.time) + durOf(b) }));
+const fits = (rec, list) => {
+  const s = toMin(rec.time), e = s + durOf(rec);
+  return e <= CLOSE && !busyOf(list).some(b => s < b.end && e > b.start);
+};
 
 async function cmd(args) {
   if (!URL_ || !TOKEN) {
@@ -45,6 +54,9 @@ async function all() {
 
 // Cria reserva; horário cancelado volta a ficar livre. Retorna o registro ou null se ocupado.
 async function create(rec) {
+  rec.dur = SERVICES[rec.service].dur;
+  const sameDay = (await all()).filter(b => b.date === rec.date);
+  if (!fits(rec, sameDay)) return null;
   const key = `${rec.date}|${rec.time}`;
   const ok = await cmd(['HSETNX', 'bookings', key, JSON.stringify(rec)]);
   if (ok) return rec;
@@ -56,4 +68,4 @@ async function create(rec) {
   return null;
 }
 
-module.exports = { cmd, all, create, SERVICES, HOURS };
+module.exports = { cmd, all, create, busyOf, SERVICES, HOURS };

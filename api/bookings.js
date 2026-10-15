@@ -1,12 +1,11 @@
-const { all, create, SERVICES, HOURS } = require('./_db');
+const { all, create, busyOf, SERVICES, HOURS } = require('./_db');
 
 module.exports = async (req, res) => {
   try {
     if (req.method === 'GET') {
       const date = req.query.date;
       if (!/^\d{4}-\d{2}-\d{2}$/.test(date || '')) return res.status(400).json({ error: 'Data inválida' });
-      const taken = (await all()).filter(b => b.date === date && b.status !== 'cancelado').map(b => b.time);
-      return res.status(200).json({ taken });
+      return res.status(200).json({ busy: busyOf((await all()).filter(b => b.date === date)) });
     }
     if (req.method === 'POST') {
       const b = typeof req.body === 'string' ? JSON.parse(req.body) : req.body || {};
