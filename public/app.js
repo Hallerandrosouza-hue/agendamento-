@@ -85,5 +85,10 @@ document.querySelectorAll('[data-s]').forEach(b => b.onclick = () => {
     await new Promise(res => { const im = new Image(); im.onload = () => { g.appendChild(im); res(); }; im.onerror = res; im.src = `/gallery/${i}.jpg`; });
   }
   if (g.children.length) $('#resultados').hidden = false;
+  g.onclick = e => {
+    if (e.target.tagName !== 'IMG') return;
+    const lb = document.createElement('div'); lb.className = 'lightbox';
+    lb.innerHTML = `<img src="${e.target.src}" alt="">`; lb.onclick = () => lb.remove(); document.body.appendChild(lb);
+  };
 })();
 render();

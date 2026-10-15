@@ -1,7 +1,10 @@
 // Armazenamento: Upstash Redis / Vercel KV (via REST). Sem as variáveis, usa memória (apenas para testes).
 const URL_ = process.env.UPSTASH_REDIS_REST_URL || process.env.KV_REST_API_URL;
 const TOKEN = process.env.UPSTASH_REDIS_REST_TOKEN || process.env.KV_REST_API_TOKEN;
-const mem = (globalThis.__mem = globalThis.__mem || {});
+const fs = require('fs');
+const FILE = require('path').join(__dirname, '..', 'dev-data.json');
+const mem = (globalThis.__mem = globalThis.__mem || (() => { try { return JSON.parse(fs.readFileSync(FILE, 'utf8')); } catch { return {}; } })());
+const save = () => { if (!process.env.VERCEL) try { fs.writeFileSync(FILE, JSON.stringify(mem)); } catch {} };
 
 const SERVICES = {
   sobrancelha: { name: 'Design de Sobrancelhas', price: 30 },
@@ -10,7 +13,10 @@ const SERVICES = {
 const HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
 
 async function cmd(args) {
-  if (!URL_ || !TOKEN) return memCmd(args);
+  if (!URL_ || !TOKEN) {
+    if (process.env.VERCEL) throw new Error('Banco de dados não configurado (Upstash Redis)');
+    const r = memCmd(args); save(); return r;
+  }
   const r = await fetch(URL_, {
     method: 'POST',
     headers: { Authorization: `Bearer ${TOKEN}`, 'Content-Type': 'application/json' },

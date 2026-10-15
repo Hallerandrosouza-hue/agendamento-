@@ -24,6 +24,6 @@ module.exports = async (req, res) => {
     }
     res.status(405).end();
   } catch (e) {
-    res.status(500).json({ error: 'Erro no servidor' });
+    res.status(500).json({ error: /Banco de dados/.test(e.message) ? e.message : 'Erro no servidor' });
   }
 };
