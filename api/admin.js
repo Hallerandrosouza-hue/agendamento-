@@ -29,6 +29,11 @@ module.exports = async (req, res) => {
       await cmd(['HSET', 'bookings', key, JSON.stringify(cur)]);
       return res.status(200).json({ ok: true });
     }
+    if (req.method === 'DELETE') { // apaga definitivamente do banco
+      if (!b.date || !b.time) return res.status(400).json({ error: 'Dados inválidos' });
+      await cmd(['HDEL', 'bookings', `${b.date}|${b.time}`]);
+      return res.status(200).json({ ok: true });
+    }
     res.status(405).end();
   } catch (e) {
     res.status(500).json({ error: 'Erro no servidor' });

@@ -46,6 +46,8 @@ main h1{font-family:'Playfair Display',serif;font-weight:400;font-size:30px;marg
 .bd.cancelado{color:#f87171;border-color:#7f1d1d;background:#2a0d0d}
 .wa{width:30px;height:30px;border-radius:50%;border:1px solid var(--line);display:grid;place-items:center;font-size:13px}
 .kb{position:relative}
+.wa.trash{background:none;color:var(--txt);cursor:pointer;font-size:13px}
+.wa.trash:hover{border-color:#7f1d1d;background:#2a0d0d}
 .kb>button{background:none;border:0;color:var(--txt);cursor:pointer;font-size:18px;padding:4px 8px}
 .menu{position:absolute;right:0;top:30px;background:#161616;border:1px solid #3a3320;border-radius:12px;padding:6px;min-width:200px;z-index:5;box-shadow:0 10px 30px #000a}
 .menu button{display:block;width:100%;text-align:left;background:none;border:0;color:var(--txt);font:500 13px Manrope;padding:10px;border-radius:8px;cursor:pointer}
@@ -153,6 +155,7 @@ function item(x){
   <div class="pr"><b>${brl(price(x))}</b>${x.payment?`<small>${PAYN[x.payment]}</small>`:''}</div>
   <span class="bd ${s}">${s==='concluido'?'Concluído':s==='cancelado'?'Cancelado':'Confirmado'}</span>
   ${ph?`<a class="wa" target="_blank" href="https://wa.me/55${ph}">💬</a>`:''}
+  <button class="wa trash" data-a="apagar" ${k} title="Apagar definitivamente">🗑</button>
   <div class="kb"><button>⋮</button><div class="menu" hidden>
   ${s!=='concluido'?`<button data-a="concluir" ${k}>✓ Marcar como concluído</button>`:''}
   ${s!=='confirmado'?`<button data-a="reabrir" ${k}>Reabrir como confirmado</button>`:''}
@@ -162,6 +165,13 @@ async function patch(d,t,status,payment){await api('PATCH',{date:d,time:t,status
 function action(a,d,t){
   closeMenus();
   const x=data.find(v=>v.date===d&&v.time===t);
+  if(a==='apagar'){
+    modal(`<button class="x" onclick="modal()">✕</button><h3>Apagar agendamento?</h3>
+    <p>Por que você quer apagar? Isso remove <b>${esc(x.name)}</b> (${x.date.split('-').reverse().join('/')} às ${x.time}) <b>definitivamente</b> do banco de dados e não dá para desfazer.</p>
+    <div style="display:flex;gap:10px"><button class="btn ghost" style="flex:1" onclick="modal()">Não</button><button class="btn" id="yes" style="flex:1;background:#dc2626;color:#fff">Sim, apagar</button></div>`);
+    $('#yes').onclick=async()=>{modal();await api('DELETE',{date:d,time:t});await load()};
+    return;
+  }
   if(a==='reabrir')return patch(d,t,'confirmado');
   if(a==='cancelar'){if(confirm('Cancelar o agendamento de '+x.name+'?'))patch(d,t,'cancelado');return}
   modal(`<button class="x" onclick="modal()">✕</button><h3>Forma de pagamento</h3><p>${esc(x.name)} · ${esc(x.serviceName)}</p>
