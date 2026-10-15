@@ -4,6 +4,7 @@ const SV = {
   henna: { name: 'Design com Henna', desc: 'Design completo com aplicação de henna.', price: 'R$ 40,00', dur: 90, label: '1h30' },
 };
 const HOURS = ['08:00','09:00','10:00','11:00','12:00','13:00','14:00','15:00','16:00','17:00'];
+const CLOSE = 18 * 60;
 const st = { step: 0, service: null, date: null, time: null, name: '', phone: '', err: '' };
 const $ = s => document.querySelector(s);
 const iso = d => `${d.getFullYear()}-${String(d.getMonth() + 1).padStart(2, '0')}-${String(d.getDate()).padStart(2, '0')}`;
@@ -15,7 +16,7 @@ function render() {
   const back = st.step > 0 && st.step < 4 ? '<button class="back" id="back">← Voltar</button>' : '';
   if (st.step === 0) {
     p.innerHTML = '<div class="opts two">' + Object.entries(SV).map(([k, v]) =>
-      `<button class="opt sv" data-k="${k}"><b>${v.name}</b><span>${v.desc}</span><br><br><span>${v.price} · 1h</span></button>`).join('') + '</div>';
+      `<button class="opt sv" data-k="${k}"><b>${v.name}</b><span>${v.desc}</span><br><br><span>${v.price} · ${v.label}</span></button>`).join('') + '</div>';
     p.querySelectorAll('.opt').forEach(b => b.onclick = () => { st.service = b.dataset.k; st.step = 1; render(); });
   } else if (st.step === 1) {
     const days = [], now = new Date();
@@ -27,7 +28,7 @@ function render() {
     p.innerHTML = back + '<p class="lead" style="margin:0 0 14px">Carregando horários...</p>';
     loadSlots();
   } else if (st.step === 3) {
-    p.innerHTML = back + `<div class="sum"><b>${SV[st.service].name}</b> · ${SV[st.service].price}<br>${fmtDate(st.date)} às ${st.time}</div>
+    p.innerHTML = back + `<div class="sum"><b>${SV[st.service].name}</b> · ${SV[st.service].price} · ${SV[st.service].label}<br>${fmtDate(st.date)} às ${st.time}</div>
       <label class="field">Seu nome<input id="n" value="${st.name}" placeholder="Nome completo" autocomplete="name"></label>
       <label class="field">Seu WhatsApp<input id="ph" value="${st.phone}" placeholder="(89) 99999-9999" inputmode="tel" autocomplete="tel"></label>
       <div class="err">${st.err}</div><button class="btn" id="go" style="width:100%">Confirmar agendamento</button>`;
@@ -48,14 +49,16 @@ function render() {
 function fmtDate(s) { const [y, m, d] = s.split('-'); const dt = new Date(y, m - 1, d); return `${DOW[dt.getDay()]}, ${d}/${m}/${y}`; }
 
 async function loadSlots() {
-  let taken = [];
-  try { taken = (await (await fetch('/api/bookings?date=' + st.date)).json()).taken || []; } catch (e) {}
-  const now = new Date(), today = iso(now);
+  let busy = [];
+  try { busy = (await (await fetch('/api/bookings?date=' + st.date)).json()).busy || []; } catch (e) {}
+  const now = new Date(), today = iso(now), dur = SV[st.service].dur;
   const p = $('#panel');
-  p.innerHTML = '<button class="back" id="back">← Voltar</button><p class="lead" style="margin:0 0 14px;text-align:left">' + fmtDate(st.date) + '</p><div class="opts">' +
+  p.innerHTML = '<button class="back" id="back">← Voltar</button><p class="lead" style="margin:0 0 14px;text-align:left">' + fmtDate(st.date) + ' · duração ' + SV[st.service].label + '</p><div class="opts">' +
     HOURS.map(h => {
+      const s = parseInt(h) * 60, e = s + dur;
       const past = st.date === today && parseInt(h) <= now.getHours();
-      return `<button class="opt" data-h="${h}" ${taken.includes(h) || past ? 'disabled' : ''}>${h}</button>`;
+      const off = past || e > CLOSE || busy.some(b => s < b.end && e > b.start);
+      return `<button class="opt" data-h="${h}" ${off ? 'disabled' : ''}>${h}</button>`;
     }).join('') + '</div>';
   $('#back').onclick = () => { st.step--; render(); };
   p.querySelectorAll('.opt').forEach(b => b.onclick = () => { st.time = b.dataset.h; st.step = 3; render(); });
@@ -92,4 +95,3 @@ document.querySelectorAll('[data-s]').forEach(b => b.onclick = () => {
   };
 })();
 render();
-
